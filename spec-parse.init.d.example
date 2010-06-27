@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# chkconfig: 5 46 07
+# description: Start up speculative parsing buildbot system
+#
+# processname: spec-parse
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && exit 0
+
+modprobe ipfw_mod
+
+USER=cltbld
+MASTER=/home/$USER/master
+SLAVE=$MASTER/slaves/spec-parse
+
+case "$1" in
+  start)
+	su - $USER -c "make -C $MASTER start"
+	su - $USER -c "make -C $SLAVE start"
+	;;
+  stop)
+	su - $USER -c "make -C $MASTER stop"
+	su - $USER -c "make -C $SLAVE stop"
+	;;
+  restart|reload)
+	su - $USER -c "make -C $MASTER reconfig"
+        ;;
+  *)
+	echo $"Usage: $0 {start|stop|restart|reload}"
+	exit 1
+esac

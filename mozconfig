@@ -1,0 +1,3 @@
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-buildbot
+ac_add_options --enable-application=browser
+ac_add_options --disable-debug --enable-optimize
